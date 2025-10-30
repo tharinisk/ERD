@@ -1,0 +1,85 @@
+erdiagram
+
+[Customer]
+*customer_ID {label: "Primary Key"}
+email {unique}
+first_name
+last_name
+phone_number
+shipping_address
+
+[Salesperson]
+*employee_ID {label: "Primary Key"}
+first_name
+last_name
+contact_info
+hire_date
+
+[Invoice]
+*invoice_number {label: "Primary Key"}
+date
+total_amount
+status
+shipping_info
++customer_ID {label: "Foreign Key"}
++salesperson_ID {label: "Foreign Key"}
+
+[Payment]
+*payment_ID {label: "Primary Key"}
++invoice_number {label: "Foreign Key"}
+amount
+payment_date
+payment_method
+payment_status
+
+[Product_Category]
+*category_ID {label: "Primary Key"}
+name
+description
+
+[Product]
+*product_ID {label: "Primary Key"}
+name
+description
+price
++category_ID {label: "Foreign Key"}
+
+[Inventory]
+*inventory_ID {label: "Primary Key"}
++product_ID {label: "Foreign Key"}
+quantity_in_stock
+last_updated
+reorder_level
+
+[Subscription]
+*subscription_ID {label: "Primary Key"}
++customer_ID {label: "Foreign Key"}
+start_date
+status
+subscription_type
+
+[Return_Refund]
+*return_ID {label: "Primary Key"}
++invoice_number {label: "Foreign Key"}
+return_date
+reason
+status
+refund_amount
+
+# Relationships
+Customer 1--* Invoice
+Salesperson 1--* Invoice
+Invoice 1--1 Payment
+Product *--1 Product_Category
+Product 1--1 Inventory
+Customer 1--1 Subscription
+Invoice 1--* Return_Refund
+
+# Cardinality Rules
+# - One customer can have many invoices
+# - One salesperson can create many invoices
+# - Each invoice must have exactly one payment
+# - Each product must belong to one category
+# - Each product has one inventory record
+# - A customer can have one subscription
+# - An invoice can have multiple returns

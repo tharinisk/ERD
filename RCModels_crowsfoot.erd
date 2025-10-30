@@ -1,0 +1,105 @@
+erdiagram RCModels
+notation=crowsfoot
+
+entity Customer {
+    customer_ID: INTEGER key
+    email: VARCHAR(255) unique
+    first_name: VARCHAR(100)
+    last_name: VARCHAR(100)
+    phone_number: VARCHAR(20)
+    shipping_address: VARCHAR(255)
+}
+
+entity Salesperson {
+    employee_ID: INTEGER key
+    first_name: VARCHAR(100)
+    last_name: VARCHAR(100)
+    contact_info: VARCHAR(255)
+    hire_date: DATE
+}
+
+entity Invoice {
+    invoice_number: INTEGER key
+    date: DATE
+    total_amount: DECIMAL(10,2)
+    status: VARCHAR(50)
+    shipping_info: VARCHAR(255)
+    customer_ID: INTEGER
+    salesperson_ID: INTEGER
+}
+
+entity Payment {
+    payment_ID: INTEGER key
+    invoice_number: INTEGER
+    amount: DECIMAL(10,2)
+    payment_date: DATE
+    payment_method: VARCHAR(50)
+    payment_status: VARCHAR(50)
+}
+
+entity Product_Category {
+    category_ID: INTEGER key
+    name: VARCHAR(100)
+    description: VARCHAR(255)
+}
+
+entity Product {
+    product_ID: INTEGER key
+    name: VARCHAR(100)
+    description: VARCHAR(255)
+    price: DECIMAL(10,2)
+    category_ID: INTEGER
+}
+
+entity Inventory {
+    inventory_ID: INTEGER key
+    product_ID: INTEGER
+    quantity_in_stock: INTEGER
+    last_updated: DATE
+    reorder_level: INTEGER
+}
+
+entity Subscription {
+    subscription_ID: INTEGER key
+    customer_ID: INTEGER
+    start_date: DATE
+    status: VARCHAR(50)
+    subscription_type: VARCHAR(50)
+}
+
+entity Return_Refund {
+    return_ID: INTEGER key
+    invoice_number: INTEGER
+    return_date: DATE
+    reason: VARCHAR(255)
+    status: VARCHAR(50)
+    refund_amount: DECIMAL(10,2)
+}
+
+relationship Customer_Invoices {
+    Customer[1] -> Invoice[N]
+}
+
+relationship Salesperson_Invoices {
+    Salesperson[1] -> Invoice[N]
+}
+
+relationship Invoice_Payment {
+    Invoice[1] -> Payment[1]
+}
+
+relationship Product_Category_Rel {
+    Product_Category[1] -> Product[N]
+}
+
+relationship Product_Inventory {
+    Product[1] -> Inventory[1]
+}
+
+relationship Customer_Subscription {
+    Customer[1] -> Subscription[0..1]
+}
+
+relationship Invoice_Returns {
+    Invoice[1] -> Return_Refund[0..N]
+}
